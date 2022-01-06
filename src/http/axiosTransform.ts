@@ -1,23 +1,19 @@
+//axios生命周期hook
 
-export function checkStatus(status,msg,errorMessageMode){
-  let errMessage = '';
-  switch (status) {
-    case 400:
-      errMessage = `${msg}`;
-      break;
-    case 401:
-      errMessage = msg || '用户没有权限'
-      break;
-      case 403:
-        errMessage = '用户得到授权，但是访问是被禁止的'
-      break;
-      case 404:
-        errMessage = '网络请求错误,未找到该资源!'
-      break;    
-      default:
-  }
-
-  if (errMessage) {
-    
-  }
+//abstract 不能new 子类必须实现父类方法
+export abstract class AxiosTransform {
+  //请求前的配置
+  beforeRequestHook?:(config:any,options:any)=>{}
+  //请求已成功处理
+  transformRequestHook?:(res:any,options:any)=>{}
+  //请求失败处理
+  requestCatchHook?:(e: Error, options: any)=>{}
+  //请求之前的拦截器
+  requestInterceptors?:(config:any,options:any)=>{}
+  //请求之后的拦截器
+  responseInterceptors?:(res:any)=>{}
+  //请求之前的拦截器错误处理
+  requestInterceptorsCatch?:(error: Error)=>{}
+  //请求之后的拦截器错误处理
+  responseInterceptorsCatch?: (error: Error) => {};
 }

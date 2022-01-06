@@ -1,3 +1,5 @@
+//axios 取消axios
+
 import axios from 'axios';
 import { isFunction } from '@/utils/command';
 
