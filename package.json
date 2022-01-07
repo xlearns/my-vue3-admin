@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "start": "npm run dev",
+    "serve": "npm run dev",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "git": "node src/script/git.js"
   },
   "dependencies": {
+    "nprogress": "^0.2.0",
     "axios": "^0.24.0",
     "qs": "^6.10.2",
     "vue": "^3.2.25",
