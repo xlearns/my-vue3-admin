@@ -1,4 +1,4 @@
-let {exec,echo} = require('shelljs')
+let {exec,echo,exit} = require('shelljs')
 let name = process.argv[2] || 'Auto-commit';
 
 if (exec('git add .').code !== 0) {
