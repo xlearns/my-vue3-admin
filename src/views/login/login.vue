@@ -3,12 +3,19 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted } from "vue";
-import { initBackControlRouters } from "@/router/auto";
-import { Session } from "@/utils/storage";
+import { store } from "@/store";
+import { useRouter } from "vue-router";
+import { storageSession } from "@/utils/storages";
+import { initBackControlRouters } from "@/router";
 export default defineComponent({
 	setup() {
+		let router = useRouter();
 		onMounted(() => {
-			Session.set("token", {});
+			if (storageSession.getItem("token")) {
+				// return router.push("/");
+			} else {
+				storageSession.setItem("token", {});
+			}
 			initBackControlRouters();
 		});
 	},

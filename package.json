@@ -5,18 +5,22 @@
     "dev": "vite",
     "serve": "npm run dev",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "git": "node src/script/git.js"
+    "git": "node script/git.js",
+    "template":"node script/template.js",
+    "component":"node script/component.js"
   },
   "dependencies": {
-    "nprogress": "^0.2.0",
     "axios": "^0.24.0",
-    "qs": "^6.10.2",
-    "vue": "^3.2.25",
-    "lodash-es": "^4.17.21",
     "dayjs": "^1.10.7",
     "echarts": "^5.2.2",
-    "vue-router": "^4.0.12"
+    "lodash-es": "^4.17.21",
+    "nprogress": "^0.2.0",
+    "qs": "^6.10.2",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.12",
+    "pinia": "2.0.9",
+    "@vueuse/core": "^6.7.1",
+    "@vueuse/motion": "^2.0.0-beta.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.0.0",

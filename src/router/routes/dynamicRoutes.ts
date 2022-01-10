@@ -1,4 +1,2 @@
 //动态路由
-export const dynamicRoutes = [
-
-]
+export const dynamicRoutes = []

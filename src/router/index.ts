@@ -1,35 +1,146 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
-import { basicRoutes } from './routes';
+import NProgress from "@/utils/progress";
+import { storageSession } from "@/utils/storages";
+import { createRouter, createWebHistory } from 'vue-router'
+import {basicRoutes} from './routes/staticRoutes'
+const modules = import.meta.glob('../views/**/*.{vue,tsx}');
 
-
-// 白名单应该包含基本静态路由
-const WHITE_NAME_LIST: string[] = [];
+// 白名单
+const WHITE_NAME_LIST = ['login'];
 
 const getRouteNames = (array: any[]) =>
   array.forEach((item) => {
     WHITE_NAME_LIST.push(item.name);
     getRouteNames(item.children || []);
   });
-getRouteNames(basicRoutes);
+// getRouteNames(basicRoutes);
 
-//router
+const isDynamic = true
+
+// 定义404页面
+const pathMatch = {
+  path: '/:path(.*)*',
+  redirect: '/404',
+};
+
+
 export const router = createRouter({
-  history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH as any),
+  history: createWebHistory(),
   routes: basicRoutes,
-  strict: true,
-  scrollBehavior: () => ({ left: 0, top: 0 }),
 });
 
-//reset
-export function resetRouter() {
-  router.getRoutes().forEach((route) => {
-    const { name } = route;
-    if (name && !WHITE_NAME_LIST.includes(name as string)) {
-      router.hasRoute(name) && router.removeRoute(name);
-    }
+
+//test
+let test = [
+  {
+    path: "/test",
+    name: "test",
+    component:"test",
+    meta: {title: '首页'},
+  },
+  {
+    path: "/haha",
+    name: "haha",
+    component:"haha",
+    meta: {title: '首页'},
+  },
+  {
+    path: "/go",
+    name: "go",
+    component:"go",
+    meta: {title: 'go'},
+  }
+] as any
+
+var isF = false  
+// init
+export function initBackControlRouters(fn:any) {
+  // const result = await getMenuListApi();
+  let  result = test 
+ 
+  basicRoutes[0].children = backEndRouter(result);
+  router.addRoute(basicRoutes[0]);
+  // 添加404页面
+  router.addRoute(pathMatch);
+  isF = true
+  fn&&fn()
+}
+
+export function backEndRouter(routes:any) {
+  if (!routes) return;
+  return routes.map((item: any) => {
+    if (item.component)
+        item.component = dynamicImport(item.component);
+    item.children && backEndRouter(item.children);
+    return item;
+});
+}
+
+
+export function setFilterRouteEnd() {
+  let filterRouteEnd: any = [];
+  return filterRouteEnd;
+}
+
+
+export function setAddRoute() {
+  setFilterRouteEnd().forEach((route: any) => {
+      router.addRoute(route);
   });
 }
-// config 
-export function setupRouter(app:any) {
-  app.use(router);
+
+
+export function dynamicImport(item:any){
+  const keys = Object.keys(modules);
+  const matchKeys = keys.filter((key) => {
+		const k = key.replace('../views', '');
+		return k.startsWith(`${item}`) || k.startsWith(`/${item}`);
+	});
+  if (matchKeys?.length === 1) {
+		const matchKey = matchKeys[0];
+		return modules[matchKey];
+    // return () => import(/* @vite-ignore */modules[matchKey].name)
+	}
+  if (matchKeys?.length > 1) {
+		console.warn('Do not create files that do not end with. Vue');
+		return false;
+	}
 }
+
+
+const getAsyncRoutes = function(){
+    return test
+}
+
+router.beforeEach((to, from, next) => {
+  const name = storageSession.getItem("token");
+  NProgress.start();
+  if (name) {
+    if(!isF){
+      initBackControlRouters(next({ ...to, replace: true }))
+    }else if(to.path == "/login"){
+      next('/')
+    }else{
+      next()
+    }
+  }else{
+    if (to.path !== "/login") {
+      if (WHITE_NAME_LIST.indexOf(to.path) !== -1) {
+        next();
+      } else {
+        //清空token
+        storageSession.clear()
+        next("/login");
+      }
+    } else {
+      next();
+    }
+  }
+});
+
+// 路由加载后
+router.afterEach(() => {
+  NProgress.done();
+});
+
+
+ 

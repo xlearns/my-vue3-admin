@@ -11,7 +11,7 @@ export const LoginRoute:any = {
 }
 
 export const HomeRoute:any = {
-  path:"/home",
+  path:"/",
   name:"home",
   component: () => import('@/views/home/home.vue'),
   meta: {
@@ -41,6 +41,6 @@ export const basicRoutes = [
   HomeRoute,
   LoginRoute,
   NotFound,
-  NoPower
+  NoPower,
 ]
 

@@ -4,6 +4,9 @@ export function is(val: unknown, type: string) {
   return toString.call(val) === `[object ${type}]`;
 }
 
+export function isArray(val: unknown){
+  return Array.isArray(val)
+}
 
 export function isFunction(val: unknown): val is Function {
   return typeof val === 'function';
