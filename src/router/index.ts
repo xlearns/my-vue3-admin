@@ -28,6 +28,9 @@ export const router = createRouter({
   routes: basicRoutes,
 });
 
+const  getAsyncRoutes = function(){
+  return test
+}
 
 //test
 let test = [
@@ -53,10 +56,8 @@ let test = [
 
 var isF = false  
 // init
-export function initBackControlRouters(fn:any) {
-  // const result = await getMenuListApi();
-  let  result = test 
- 
+export async function initBackControlRouters(fn:any) {
+  let  result = await getAsyncRoutes() 
   basicRoutes[0].children = backEndRouter(result);
   router.addRoute(basicRoutes[0]);
   // 添加404页面
@@ -107,9 +108,7 @@ export function dynamicImport(item:any){
 }
 
 
-const getAsyncRoutes = function(){
-    return test
-}
+
 
 router.beforeEach((to, from, next) => {
   const name = storageSession.getItem("token");
