@@ -6,8 +6,8 @@
     "serve": "npm run dev",
     "build": "vue-tsc --noEmit && vite build",
     "git": "node script/git.js",
-    "template":"node script/template.js",
-    "component":"node script/component.js"
+    "template": "node script/template.js",
+    "component": "node script/component.js"
   },
   "dependencies": {
     "axios": "^0.24.0",
