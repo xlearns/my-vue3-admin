@@ -45,9 +45,10 @@ export function checkStatus(status:any,msg:any,errorMessageMode:any){
 
   if (errMessage) {
     if (errorMessageMode === 'modal') {
-    
+      
     } else if (errorMessageMode === 'message') {
      
     }
+    console.log('errMessage',errMessage)
   }
 }

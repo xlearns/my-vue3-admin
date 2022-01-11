@@ -7,7 +7,8 @@
     "build": "vue-tsc --noEmit && vite build",
     "git": "node script/git.js",
     "template": "node script/template.js",
-    "component": "node script/component.js"
+    "component": "node script/component.js",
+    "api":"node script/api.js"
   },
   "dependencies": {
     "axios": "^0.24.0",

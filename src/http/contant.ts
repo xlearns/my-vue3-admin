@@ -16,8 +16,8 @@ export const RequestEnum  = {
 }
 
 export const ResultEnum = {
-  SUCCESS :0,
-  ERROR :1,
+  SUCCESS :1,
+  ERROR :0,
   TIMEOUT :401,
   TYPE :'success',
 }

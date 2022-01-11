@@ -2,10 +2,14 @@ import { clone } from 'lodash-es';
 import { VAxios } from './Axios';
 import { checkStatus } from './checkStatus';
 import { joinTimestamp, formatRequestDate } from './helper';
-import { isString,setObjToUrlParams } from '@/utils/command';
+import { isString,setObjToUrlParams,deepMerge } from '@/utils/command';
 import { getToken } from '@/utils/auth';
 import {ContentTypeEnum,RequestEnum,ResultEnum} from './contant'
 import {ajaxStatusContent as t} from '@/utils/contant'
+import { useGlobSetting } from '@/utils/ajax';
+
+const globSetting = useGlobSetting();
+const urlPrefix = globSetting.urlPrefix;
 
 const transform = {
 
@@ -99,6 +103,7 @@ const transform = {
         } else if (errorMessageMode === 'message') {
          
         }
+        console.log('errMessage',errMessage)
         return Promise.reject(error);
       }
     } catch (error) {
@@ -128,12 +133,12 @@ const transform = {
       throw new Error(t('apiRequestFailed'));
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, result, message } = data;
-
+    const { errorCode:code, result, message } = data;
     // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    const hasSuccess = data && Reflect.has(data, 'errorCode') && code === ResultEnum.SUCCESS;
     if (hasSuccess) {
-      return result;
+      // return result;
+      return data
     }
 
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
@@ -159,8 +164,46 @@ const transform = {
     } else if (options.errorMessageMode === 'message') {
       
     }
-
+    console.log('transformRequestHook',timeoutMsg)
     throw new Error(timeoutMsg || t('apiRequestFailed'));
   },
 
 };
+
+function createAxios(opt?: any){
+  return new VAxios(
+    deepMerge({
+      //e.g: Bearer
+      authenticationScheme: '',
+      timeout: 10 * 1000,
+      headers: { 'Content-Type': ContentTypeEnum.JSON },
+      transform: clone(transform),
+      requestOptions: {
+        // 默认将prefix 添加到url
+        joinPrefix: true,
+        // 是否返回原生响应头 比如：需要获取响应头时使用该属性
+        isReturnNativeResponse: false,
+        // 需要对返回数据进行处理
+        isTransformResponse: true,
+        // post请求的时候添加参数到url
+        joinParamsToUrl: false,
+        // 格式化提交参数时间
+        formatDate: true,
+        // 消息提示类型
+        errorMessageMode: 'message',
+        // 接口地址
+        apiUrl: globSetting.apiUrl,
+        // 接口拼接地址
+        urlPrefix: urlPrefix,
+        //  是否加入时间戳
+        joinTime: true,
+        // 忽略重复请求
+        ignoreCancelToken: true,
+        // 是否携带token
+        withToken: true,
+      }
+    }
+    ,opt||{})
+  )
+}
+export const defHttp = createAxios();

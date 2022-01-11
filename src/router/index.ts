@@ -1,7 +1,8 @@
 import NProgress from "@/utils/progress";
 import { storageSession } from "@/utils/storages";
 import { createRouter, createWebHistory } from 'vue-router'
-import {basicRoutes} from './routes/staticRoutes'
+import { usePermissionStoreHook } from "@/store/modules/permission";
+import {basicRoutes} from './modules/staticRoutes'
 const modules = import.meta.glob('../views/**/*.{vue,tsx}');
 
 // 白名单
@@ -28,9 +29,7 @@ export const router = createRouter({
   routes: basicRoutes,
 });
 
-const  getAsyncRoutes = function(){
-  return test
-}
+
 
 //test
 let test = [
@@ -38,7 +37,7 @@ let test = [
     path: "/test",
     name: "test",
     component:"test",
-    meta: {title: '首页'},
+    meta: {title: '首页',authority:["v-admin"]},
   },
   {
     path: "/haha",
@@ -54,10 +53,37 @@ let test = [
   }
 ] as any
 
+let test1 = [
+  {
+    path: "/test",
+    name: "test",
+    component:"test",
+    meta: {title: '首页',authority:["v-test"]},
+  },
+  {
+    path: "/haha",
+    name: "haha",
+    component:"haha",
+    meta: {title: '首页'},
+  },
+  {
+    path: "/go",
+    name: "go",
+    component:"go",
+    meta: {title: 'go'},
+  }
+] as any
+// test end
+
+const  getAsyncRoutes = function(){
+  return Math.floor(Math.random()*10)%2?test:test1
+}
+
 var isF = false  
 // init
 export async function initBackControlRouters(fn:any) {
   let  result = await getAsyncRoutes() 
+  usePermissionStoreHook().changeSetting(result);
   basicRoutes[0].children = backEndRouter(result);
   router.addRoute(basicRoutes[0]);
   // 添加404页面

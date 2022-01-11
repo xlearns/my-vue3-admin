@@ -1,10 +1,19 @@
-import { createApp } from 'vue'
+import { createApp,Directive } from 'vue'
 import App from './App.vue'
 import { router } from '@/router';
-// import {store,key} from './store'
-// import { router } from '@/router/auto';
+import { setupStore } from "@/store";
+
 const app = createApp(App)
-// setupRouter(app);
+
+
+import * as directives from "@/directives";
+
+Object.keys(directives).forEach(key => {
+  app.directive(key, (directives as { [key: string]: Directive })[key]);
+});
+
+setupStore(app);
+
 app.use(router)
-// app.use(store,key)
+
 app.mount("#app")
