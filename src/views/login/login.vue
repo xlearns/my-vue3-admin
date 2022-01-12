@@ -1,5 +1,8 @@
 <template>
-	<div class="login">login</div>
+	<div class="login">
+		<div class="bg-black w-1/5 h-1/5 mt-10 hover:mt-20">test</div>
+		login
+	</div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted } from "vue";
@@ -14,7 +17,7 @@ export default defineComponent({
 			if (storageSession.getItem("token")) {
 				// return router.push("/");
 			} else {
-				storageSession.setItem("token", {});
+				// storageSession.setItem("token", {});
 			}
 			initBackControlRouters();
 		});

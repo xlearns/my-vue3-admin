@@ -4,15 +4,23 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title><%= title %></title>
     <style>
       * {
         margin: 0;
         padding: 0;
       }
     </style>
-     <script>
-      window.process = {};
+    <script>
+      (() => {
+        // 保存主题
+        // var htmlRoot = document.getElementById('htmlRoot');
+        // var theme = window.localStorage.getItem('__APP__DARK__MODE__');
+        // if (htmlRoot && theme) {
+        //   htmlRoot.setAttribute('data-theme', theme);
+        //   theme = htmlRoot = null;
+        // }
+      })();
     </script>
   </head>
   <body>
@@ -150,7 +158,7 @@
           <div class="app-loading-dots">
             <span class="dot dot-spin"><i></i><i></i><i></i><i></i></span>
           </div>
-          <div class="app-loading-title">admin</div>
+          <div class="app-loading-title"><%= title %></div>
         </div>
       </div>
     </div>

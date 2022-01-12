@@ -13,9 +13,19 @@ export const LoginRoute:any = {
 export const HomeRoute:any = {
   path:"/",
   name:"home",
-  component: () => import('@/views/home/home.vue'),
+  component: () => import('@/layout/index.vue'),
+  redirect:"/home",
   meta: {
     title: '首页',
+  },
+}
+
+export const RootRoute:any = {
+  path:"/home",
+  name:"home1",
+  component: () => import('@/views/home/home.vue'),
+  meta: {
+    title: '首页1',
   },
 }
 
@@ -39,6 +49,7 @@ export const NoPower:any = {
 
 export const basicRoutes = [
   HomeRoute,
+  RootRoute,
   LoginRoute,
   NotFound,
   NoPower,

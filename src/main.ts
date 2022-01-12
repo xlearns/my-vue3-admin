@@ -2,6 +2,7 @@ import { createApp,Directive } from 'vue'
 import App from './App.vue'
 import { router } from '@/router';
 import { setupStore } from "@/store";
+import '@/utils/tailwind/index.css'
 
 const app = createApp(App)
 

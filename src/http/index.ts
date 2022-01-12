@@ -169,13 +169,13 @@ const transform = {
   },
 
 };
-
+let timeout = 10
 function createAxios(opt?: any){
   return new VAxios(
     deepMerge({
       //e.g: Bearer
       authenticationScheme: '',
-      timeout: 10 * 1000,
+      timeout: timeout * 1000,
       headers: { 'Content-Type': ContentTypeEnum.JSON },
       transform: clone(transform),
       requestOptions: {

@@ -4,6 +4,10 @@ import { resolve } from 'path';
 import vueJsx from "@vitejs/plugin-vue-jsx"
 import { wrapperEnv,createProxy } from './build/utils';
 import { OUTPUT_DIR } from './build/config';
+import { configHtmlPlugin } from './build/plugin/html';
+import svgLoader from "vite-svg-loader";
+
+
 const isPrivate = true 
 
 
@@ -16,6 +20,9 @@ const alias = {
   "@": pathResolve("src"),
 };
 export default ({command,mode})=>{
+
+  const isBuild = command === 'build';
+
   const root = process.cwd();
   const env = loadEnv(mode, root);
   const {
@@ -39,6 +46,8 @@ export default ({command,mode})=>{
     plugins: [
       vue(),
       vueJsx(),
+      svgLoader(),
+      configHtmlPlugin(wrapperEnv(env),isBuild)
     ],
     build: {
       minify: false,

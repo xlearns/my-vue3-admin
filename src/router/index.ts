@@ -3,6 +3,7 @@ import { storageSession } from "@/utils/storages";
 import { createRouter, createWebHistory } from 'vue-router'
 import { usePermissionStoreHook } from "@/store/modules/permission";
 import {basicRoutes} from './modules/staticRoutes'
+import Layout from "@/layout/index.vue";
 const modules = import.meta.glob('../views/**/*.{vue,tsx}');
 
 // 白名单
@@ -95,8 +96,12 @@ export async function initBackControlRouters(fn:any) {
 export function backEndRouter(routes:any) {
   if (!routes) return;
   return routes.map((item: any) => {
-    if (item.component)
-        item.component = dynamicImport(item.component);
+    if (item.redirect) {
+      item.component = Layout;
+    }else if (item.component){
+      item.component = dynamicImport(item.component);
+    }
+        
     item.children && backEndRouter(item.children);
     return item;
 });
