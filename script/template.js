@@ -22,13 +22,14 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-@import url(./${name}.scss);
+@import url(./${name}.module.scss);
 </style>
 
 `
 let scssTemplate = `
   .${name}{
     height:100vh;
+    width: 100%;
   }
 `
 
@@ -39,7 +40,7 @@ mkdir(name)
 cd(name)
 mkdir('component')
 touch(`${name}.vue`);
-touch(`${name}.scss`);
+touch(`${name}.module.scss`);
 touch(`${name}.ts`);
 echo(vueTemplate).toEnd(`${name}.vue`)
-echo(scssTemplate).toEnd(`${name}.scss`)
+echo(scssTemplate).toEnd(`${name}.module.scss`)

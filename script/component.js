@@ -14,16 +14,56 @@ export const ${name}Component = Object.assign(${name}, {
 });
 export default ${name}Component;
 `
+let indexVueTemplate = `
+import { App } from "vue";
+import ${name} from "./src/${name}.vue";
 
+export const ${name}Component = Object.assign(${name}, {
+  install(app: App) {
+    app.component(${name}.name, ${name});
+  }
+});
+export default ${name}Component;
+`
+
+let vueTemplate = `
+<template>
+	<div class="bd-components-${name}"></div>
+</template>
+
+<script lang="ts">
+import { defineComponent, getCurrentInstance, reactive, toRefs } from "vue";
+
+const props = {}
+export default defineComponent({
+  props,
+  name: "w-ui-${name}",
+	setup() {
+		const instance = getCurrentInstance();
+		const state = reactive({});
+		return {
+			...toRefs(state),
+		};
+	},
+});
+</script>
+
+<style scoped>
+@import url(./${name}.module.scss);
+</style>
+`
 let tsxTemplate = `
 import {
   defineComponent,
   getCurrentInstance,
-  unref
+  unref,
+  reactive,
+  toRefs
 } from "vue";
-import "./${name}.scss";
 
-const rootClass = "bd-components-${name}"; 
+import classes from "./${name}.module.scss";
+
+const rootClass =classes['bd-components-${name}']
 
 const props = {
   
@@ -35,17 +75,24 @@ export default defineComponent({
   emits: [],
   setup(props, { emit }) {
     const instance = getCurrentInstance();
-    return () => (
-      <>
-      <div  class={rootClass}></div>
-      </>
-    );
+    let state = reactive({})
+    const fn = function(){}
+    return {
+      fn,
+      ...toRefs(state)
+    }
+  },
+  render(){
+    const {fn} = this;
+    return (
+      <div className={rootClass}>${name}</div>
+    )
   }
 });
 `
 let scssTemplate = `
   .bd-components-${name}{
-   
+    width: 100%;
   }
 `
 
@@ -55,7 +102,17 @@ rm('-rf',name)
 mkdir(name)
 cd(name)
 mkdir('src')
-echo(indexTemplate).toEnd(`index.ts`)
+if(type!='vue'){
+  echo(indexTemplate).toEnd(`index.ts`)
+}else{
+  echo(indexVueTemplate).toEnd(`index.ts`)
+}
+
 cd('src')
-echo(tsxTemplate).toEnd(`${name}.${type}`)
-echo(scssTemplate).toEnd(`${name}.scss`)
+if(type!='vue'){
+  echo(tsxTemplate).toEnd(`${name}.${type}`)
+}else{
+  echo(vueTemplate).toEnd(`${name}.${type}`)
+}
+
+echo(scssTemplate).toEnd(`${name}.module.scss`)
