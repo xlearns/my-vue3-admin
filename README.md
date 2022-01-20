@@ -15,6 +15,7 @@
 - [ ] pinia
 - [ ] windicss
 - [ ] husky
+- [ ] jest
 - [ ] svg 组件
 - [ ] axios 封装
 - [ ] 侧边栏缩进
